@@ -1,0 +1,28 @@
+#!/bin/bash
+
+adb wait-for-device
+adb root
+adb remount
+
+CPU_ABI=$(adb shell getprop ro.product.cpu.abi)
+SRC_SQLITE3="$TOOLBOX_HOME/sqlite3/$CPU_ABI/sqlite3"
+DST_SQLITE3="/data/local/toolbox/sqlite3"
+
+# If file exists
+if [[ -f "$SRC_SQLITE3" ]]; then
+    adb push $SRC_SQLITE3 $DST_SQLITE3
+     if [[ $? -ne 0 ]]; then
+        echo "sqlite3 installation failed."
+        exit
+    fi
+
+    adb shell chmod 777 $DST_SQLITE3
+    if [[ $? -ne 0 ]]; then
+        echo "sqlite3 installation failed."
+        exit
+    fi
+
+    echo "sqlite3 successfully installed."
+else
+    echo "\"$SRC_SQLITE3\" does not exits"
+fi
