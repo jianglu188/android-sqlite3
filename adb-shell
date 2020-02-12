@@ -1,0 +1,9 @@
+#!/usr/bin/expect --
+
+# sudo apt install expect
+spawn adb shell
+expect "$" {
+    sleep 0.1
+    send "export PATH=/data/local/toolbox/:\$PATH\n"
+}
+interact
